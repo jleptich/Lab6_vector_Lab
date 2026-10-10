@@ -33,12 +33,22 @@ vector scalar_mult(vector a, int x){
 
 vector check_operation(vector a, vector b, char arith, int mult){
     switch(arith){
+        
         case '+':
         return add(a, b);
+        
         case '-':
         return sub(a,b);
+        
         case '*':
+        if(&b == NULL){
         return scalar_mult(a, mult);
+        }
+
+        else{
+            return scalar_mult(b, mult);
+        }
+
         default:
         printf("UNKOWN INPUT: RETURNING BACK TO TERMINAL\n");
         vector empty;
@@ -57,6 +67,9 @@ char assignment(char* token){
             }
             else if(!strcmp(token,"*")){
                 op = '*';
+            }
+            else if(!strcmp(token,"=")){
+                op = '=';
             }
             else{
                 op = 'a';

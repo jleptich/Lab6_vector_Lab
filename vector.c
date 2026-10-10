@@ -21,6 +21,8 @@ int main(){
     printf("WELCOME TO VECTOR CALCULATOR: YOU CAN QUIT BY SAYING QUIT AND GET HELP BY SAYING -h.\n ELSE CREATE A VECTOR LIMIT COMMANDS TO 30 CHARACTERS\n");
 
     while(1){
+
+        //initializes the input array and the 5 string tokens
         char input[30];
         char* token1;
         char* token2;
@@ -29,18 +31,24 @@ int main(){
         char* token5;
         printf("Enter your command:");
         fgets(input, 30, stdin);
+
+        //all the tokens scan from input
         token1 = strtok(input, " \n");
         token2 = strtok(NULL, " \n");
         token3 = strtok(NULL, " \n");
         token4 = strtok(NULL, " \n");
         token5 = strtok(NULL, " \n");
         
+
+        //if only token1 has a input
         if(token2 == NULL && token3 == NULL && token4 == NULL && token5 == NULL){
+            //checks to see if the user wants to quit
             if(!strcmp(token1,"QUIT")){
                 printf("Thank you for using the VECTOR CALCULATOR\n");
                 return 0;
             }
 
+            //checks to see if the user raised the help flag
             else if(!strcmp(token1,"-h")){
                 printf("-------------HELP------------------\n");
                 printf("REMEMBER NEVER USE , WHEN CREATING A NEW VECTOR\n\n");
@@ -53,156 +61,152 @@ int main(){
             
             }
 
+            //checks to see if the user wanted a list of all vectors created
             else if(!strcmp(token1, "list")){
                 if(index > 0){
                  for(int i = 0; i<index; i++){
-                    printf("%s = < %.2f, %.2f, %.2f >\n",vect_list[i].name,vect_list[i].x,vect_list[i].y,vect_list[i].z);
+                    printf("%s = < %d, %d, %d >\n",vect_list[i].name,vect_list[i].x,vect_list[i].y,vect_list[i].z);
             }
         }
                 else{
                     printf("No vectors have been created\n\n");
                 }
             }
-
-            for(int i = 0; i<index; i++){
-                if(!strcmp(vect_list[i].name,token1)){
-                    printf("%s = < %.2f, %.2f, %.2f >\n",vect_list[i].name,vect_list[i].x,vect_list[i].y,vect_list[i].z);
-                    break;
-                }
+            //checks to see if the user wanted a single vector printed
+            //for(int i = 0; i<index; i++){
+                //if(!strcmp(vect_list[i].name,token1)){
+                   // printf("%s = < %d, %d, %d >\n",vect_list[i].name,vect_list[i].x,vect_list[i].y,vect_list[i].z);
+                    //break;
+                //}
             }
 
-        }
+        
+        //No such operators that only use token1 and token2
         else if(token3 == NULL && token4 == NULL && token5 == NULL){
             printf("THIS IS NOT A VALID COMMAND TYPE IN -h IF YOU NEED HELP\n");
         }
+
+        //Used to check if only vector arithmetic is being used without being inputted to a new vector
         else if(token4 == NULL && token5 == NULL){
-            vector hold1;
-            vector hold2;
-            int hold3 = 0;
+            vector *hold1 = NULL;
+            vector *hold2 = NULL;
+            int hold3 = 0;  //if a vector is being multiplied by an integer 
+            
             for(int i = 0; i<index; i++){
                 if(!strcmp(vect_list[i].name,token1)){
-                    hold1.name = vect_list[i].name;
-                    hold1.x = vect_list[i].x;
-                    hold1.y = vect_list[i].y;
-                    hold1.z = vect_list[i].z;
+                    hold1 = &vect_list[i];
                     break;
                 }
             }
-                if(hold1.name == NULL){
+                if(hold1 == NULL){
                     if(atoi(token1) != 0){
                         hold3 = atoi(token1);
                     }
                     else{
-                        printf("YOU'VE ENTERED A INVALID COMMAND\n");
-                        break;
+                        printf("YOU'VE ENTERED A INVALID COMMAND\n\n");
+                        continue;
                     }
                 }
             
             for(int i = 0; i<index; i++){
                 if(!strcmp(vect_list[i].name,token3)){
-                    hold2.name = vect_list[i].name;
-                    hold2.x = vect_list[i].x;
-                    hold2.y = vect_list[i].y;
-                    hold2.z = vect_list[i].z;
+                    hold2 = &vect_list[i];
                     break;
                 }
             }
-            if(hold2.name == NULL){
+
+            if(hold2 == NULL){
                     if(atoi(token3) != 0){
                         hold3 = atoi(token3);
                     }
                     else{
                         printf("YOU'VE ENTERED A INVALID COMMAND\n");
-                        break;
+                        continue;
                     }
                 }
             char op;
             op = assignment(token2);
             if(op == 'a'){
                 printf("Invalid assignment character used\n");
-                break;
+                continue;
             }
-            vector temp = check_operation(hold1, hold2, op,hold3);
-            printf("%s = < %.2f, %.2f, %.2f >\n",temp.name, temp.x, temp.y, temp.z);
+            vector temp = check_operation(*hold1, *hold2, op,hold3);
+            printf("%s = < %d, %d, %d >\n",temp.name, temp.x, temp.y, temp.z);
         }
+
+        //No commands have only 4 inputs
         else if(token5 == NULL){
             printf("NO COMMAND ONLY HAS 4 INPUTS: INVALID COMMAND\n");
         }
-        else{
-            char assign = assignment(token2);
-            char operator = assignment(token4);
 
-                vector hold1;
-                vector hold2; 
-                vector hold3;
+        //uses all five tokens
+        else{
+            char assign = assignment(token2);   //token2 has to be a equals sign '='
+            char operator = assignment(token4); //token4 has to be some symbol for arithmetic
+
+                vector *hold1 = NULL;
+                vector *hold2 = NULL; 
+                vector *hold3 = NULL;
                 int mult = 0;
-                int stop = 1;
+
+                //sees if token1, token3, or token5 are prexisting vectors in the vect_list array
                 for(int i = 0; i<index; i++){
+
                 if(!strcmp(vect_list[i].name,token1)){
-                    hold1.name = vect_list[i].name;
-                    hold1.x = vect_list[i].x;
-                    hold1.y = vect_list[i].y;
-                    hold1.z = vect_list[i].z;
+                    hold1 = &vect_list[i];
                 }
 
                 if(!strcmp(vect_list[i].name,token3)){
-                    hold2.name = vect_list[i].name;
-                    hold2.x = vect_list[i].x;
-                    hold2.y = vect_list[i].y;
-                    hold2.z = vect_list[i].z;
+                    hold2 = &vect_list[i];
                 }
 
                 if(!strcmp(vect_list[i].name,token5)){
-                    hold3.name = vect_list[i].name;
-                    hold3.x = vect_list[i].x;
-                    hold3.y = vect_list[i].y;
-                    hold3.z = vect_list[i].z;
+                    hold3 = &vect_list[i];
                 }
 
             }
 
-            if(hold1.name == NULL){
+            //If vector hold1 doesn't have a name then it needs to be set up as a new vector
+            if(hold1 == NULL){
                 if(index >= 10){
-                printf("You cannot create more vectors, please clear your vector list if you want to create new vectors\n");
-                stop = 0;
+                printf("You cannot create more vectors, please clear your vector list if you want to create new vectors\n\n");
+                continue;
             }
             else{
-                strcpy(hold1.name, token1);
-            }
-            }
-            if(hold2.name == NULL && operator == '*' && stop == 1){
-                mult = atoi(token3);
-            }
-            else if(operator != 'a' && stop == 1){
-                printf("invalid command, type in -h for help\n");
-            }
-            if(hold2.name == NULL && hold3.name == NULL && operator == 'a' && assign == '=' && stop == 1){
-                hold1.x = atoi(token3);
-                hold1.y = atoi(token4);
-                hold1.z = atoi(token5);
-
-                strcpy(vect_list[index].name,hold1.name);
-                vect_list[index].x = hold1.x;
-                vect_list[index].y = hold1.y;
-                vect_list[index].z = hold1.z;
+                hold1 = &vect_list[index];
+                strcpy(hold1->name, token1);
                 index++;
             }
-            if(hold3.name == NULL && operator == '*' && stop == 1){
+            }
+
+            //Statement for if token2 and token5 are not vectors and are assigning values to a new/prexisting vector
+            if(hold2 == NULL && hold3 == NULL && operator == 'a' && assign == '='){
+                hold1->x = atoi(token3);
+                hold1->y = atoi(token4);
+                hold1->z = atoi(token5);
+            }
+
+             //looks to see if a vector is being multiplied by a scalar
+            if(hold2==NULL && operator == '*'){
                 mult = atoi(token3);
             }
-            else if (operator != 'a' && stop == 1){
-                printf("invalid command, type in -h for help\n");
-            }
-            if(operator != 'a' && assign == '=' && stop == 1){
-            vector temp = check_operation(hold1, hold2, operator, mult);
-            vect_list[index].name = hold1.name;
-            vect_list[index].x = temp.x;
-            vect_list[index].y = temp.y;
-            vect_list[index].z = temp.z;
-            index++;
-            }
+            
+
+            
+            //checks to see if token3 is a scalar multiplier
+            if(hold3 ==NULL && operator == '*'){
+                mult = atoi(token3);
             }
             
+            //If vector arithmetic is being done
+            if(operator != 'a' && assign == '='){
+            vector temp = check_operation(*hold2, *hold3, operator, mult);
+            hold1->x = temp.x;
+            hold1->y = temp.y;
+            hold1->z = temp.z;
+            }
     }
+}
     return 0;
+
 }

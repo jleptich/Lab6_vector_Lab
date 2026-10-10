@@ -1,10 +1,8 @@
 
-
-
-typedef struct vector{
-    char* name;
-    float x;
-    float y;
-    float z;
+typedef struct{
+    char name[20];
+    int x;
+    int y;
+    int z;
 
 }vector;

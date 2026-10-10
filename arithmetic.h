@@ -1,3 +1,4 @@
+
 vector check_operation(vector a, vector b, char arith, int mult);
 vector add(vector a, vector b);
 vector sub(vector a, vector b);
