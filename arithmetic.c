@@ -4,44 +4,44 @@
 
 
 
-vector add(vector a, vector b){
+vector add(vector *a, vector *b){
     vector assign;
-    assign.x = a.x + b.x;
-    assign.y = a.y + b.y;
-    assign.z = a.z + b.z;
+    assign.x = a->x + b->x;
+    assign.y = a->y + b->y;
+    assign.z = a->z + b->z;
 
     return assign;
 }
 
-vector sub(vector a, vector b){
+vector sub(vector *a, vector *b){
     vector assign;
-    assign.x = a.x - b.x;
-    assign.y = a.y - b.y;
-    assign.z = a.z - b.z;
+    assign.x = a->x - b->x;
+    assign.y = a->y - b->y;
+    assign.z = a->z - b->z;
 
     return assign;
 }
 
-vector scalar_mult(vector a, int x){
+vector scalar_mult(vector *a, int x){
     vector assign;
-    assign.x = a.x*x;
-    assign.y = a.y*x;
-    assign.z = a.z*x;
+    assign.x = a->x*x;
+    assign.y = a->y*x;
+    assign.z = a->z*x;
     return assign;
 }
 
 
-vector check_operation(vector a, vector b, char arith, int mult){
+vector check_operation(vector *a, vector *b, char arith, int mult){
     switch(arith){
         
         case '+':
         return add(a, b);
         
         case '-':
-        return sub(a,b);
+        return sub(a, b);
         
         case '*':
-        if(&b == NULL){
+        if(b == NULL){
         return scalar_mult(a, mult);
         }
 

@@ -51,13 +51,14 @@ int main(){
             //checks to see if the user raised the help flag
             else if(!strcmp(token1,"-h")){
                 printf("-------------HELP------------------\n");
-                printf("REMEMBER NEVER USE , WHEN CREATING A NEW VECTOR\n\n");
+                printf("REMEMBER NEVER USE A COMMA, PUT SPACES BETWEEN EVERY INPUT WHEN CREATING A NEW VECTOR\n\n");
                 printf("TO ADD TWO VECTORS YOU CAN DO VEC1 + VEC2: THIS WILL PRINTOUT THE TWO VECTORS ADDED TOGETHER\n\n");
-                printf("YOU CAN ALSO ASSIGN A VECTOR BY ADDING TWO VECTORS BY DOING VEC = VEC1 + VEC2\n\n");
+                printf("YOU CAN ALSO ASSIGN A VECTOR BY ADDING OR SUBTRACTING TWO VECTORS BY DOING VEC = VEC1 + VEC2\n\n");
                 printf("YOU CAN DO SUBTRACTION WITH VEC1 - VEC2 AND ASSIGN A VECTOR WITH ABOVE MENTION NOTATION\n\n");
                 printf("YOU CAN DO SCALAR MULTIPICATION BY MULTIPLING A VECTOR BY AN INT: VEC1*2\n\n");
                 printf("IF YOU WISH TO SEE ALL THE VECTORS CREATED ENTER LIST\n\n");
-                printf("IF YOU WISH TO LEAVE ENTER QUIT\n\n");
+                printf("IF YOU WISH TO LEAVE ENTER quit\n\n");
+                printf("IF YOU WISH TO CLEAN OUT YOUR VECTOR LIST INPUT clean\n\n");
             
             }
 
@@ -72,13 +73,21 @@ int main(){
                     printf("No vectors have been created\n\n");
                 }
             }
-            //checks to see if the user wanted a single vector printed
-            //for(int i = 0; i<index; i++){
-                //if(!strcmp(vect_list[i].name,token1)){
-                   // printf("%s = < %d, %d, %d >\n",vect_list[i].name,vect_list[i].x,vect_list[i].y,vect_list[i].z);
-                    //break;
-                //}
+
+            else if(!strcmp(token1, "clean")){
+                printf("Cleaning vector list\n\n");
+                index = 0;
             }
+            //Prints out a single vectors value
+            else{
+            for(int i = 0; i<index; i++){
+                if(!strcmp(vect_list[i].name,token1)){
+                    printf("%s = < %d, %d, %d >\n",vect_list[i].name,vect_list[i].x,vect_list[i].y,vect_list[i].z);
+                    break;
+                }
+            }
+            }
+        }
 
         
         //No such operators that only use token1 and token2
@@ -92,6 +101,7 @@ int main(){
             vector *hold2 = NULL;
             int hold3 = 0;  //if a vector is being multiplied by an integer 
             
+            
             for(int i = 0; i<index; i++){
                 if(!strcmp(vect_list[i].name,token1)){
                     hold1 = &vect_list[i];
@@ -101,6 +111,7 @@ int main(){
                 if(hold1 == NULL){
                     if(atoi(token1) != 0){
                         hold3 = atoi(token1);
+                        
                     }
                     else{
                         printf("YOU'VE ENTERED A INVALID COMMAND\n\n");
@@ -130,8 +141,8 @@ int main(){
                 printf("Invalid assignment character used\n");
                 continue;
             }
-            vector temp = check_operation(*hold1, *hold2, op,hold3);
-            printf("%s = < %d, %d, %d >\n",temp.name, temp.x, temp.y, temp.z);
+            vector temp = check_operation(hold1, hold2, op,hold3);
+            printf("output = < %d, %d, %d >\n", temp.x, temp.y, temp.z);
         }
 
         //No commands have only 4 inputs
@@ -195,12 +206,12 @@ int main(){
             
             //checks to see if token3 is a scalar multiplier
             if(hold3 ==NULL && operator == '*'){
-                mult = atoi(token3);
+                mult = atoi(token5);
             }
-            
+
             //If vector arithmetic is being done
             if(operator != 'a' && assign == '='){
-            vector temp = check_operation(*hold2, *hold3, operator, mult);
+            vector temp = check_operation(hold2, hold3, operator, mult);
             hold1->x = temp.x;
             hold1->y = temp.y;
             hold1->z = temp.z;
